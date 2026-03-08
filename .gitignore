@@ -1,0 +1,63 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+**/bin/
+**/obj/
+publish/
+
+# Rider
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+.packages/
+.nuget/
+
+# VS Code
+.vscode/
+
+# Dotnet tooling
+.tools/
+.toolstarget/
+
+# Test / coverage
+TestResults/
+*.trx
+coverage/
+
+# Logs
+*.log
+
+# Local configuration / secrets
+local.settings.json
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.Local.json
+.env
+.env.local
+secrets.json
+secrets.*.json
+usersecrets/
+
+# OS generated
+Thumbs.db
+.DS_Store
+
+# Database files
+*.mdf
+*.ldf
+
+# Packages and caches
+packages/
+*.cache
+
+# Other
+*.Publish.xml
+*.nupkg
+*.vsix
