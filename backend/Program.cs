@@ -1,4 +1,11 @@
 
+/*Note 
+ * if your error says that "DbContextOptionsBuilder does not contain a definition for UseSQLServer():"
+ * 
+ */
+using Microsoft.EntityFrameworkCore;
+using backend.Data;
+
 namespace backend
 {
     public class Program
@@ -13,6 +20,14 @@ namespace backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //setup your database connection string here
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            }
+                );
+            builder.Services.AddScoped<UserRepository>();
 
             var app = builder.Build();
 
