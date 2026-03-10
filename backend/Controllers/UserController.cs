@@ -1,6 +1,6 @@
-﻿using backend.Data;
-using backend.DTO;
+﻿using backend.DTO;
 using backend.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,39 +10,26 @@ namespace backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserRepository _userRepo;
+        //Dependency Injection
+        //field for the UserService
+        private readonly UserService _userService;
 
-        public UserController(UserRepository userRepo)
-        {
-            _userRepo = userRepo;
+        //constructor injection for the UserService
+        public UserController(UserService userService) {
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<UserDTO>>> GetUser()
         {
-            var users = await _userRepo.GetAllUsersAsync();
-            var userDTOs = users.Select(u => new UserDTO
-            {
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email
-            }).ToList();
-            return Ok(userDTOs);
+            var user = await _userService.GetallUsersAsync();
+            return Ok(user);
         }
         [HttpPost]
         public async Task<ActionResult> AddUser(UserDTO userDTO)
         {
-            var user = new User
-            {
-                FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName,
-                Email = userDTO.Email,
-                PasswordHash = "hashedpassword"
-                // PasswordHash should be set after hashing the password, which is not included in this DTO
-            };
-            await _userRepo.AddUserAsync(user);
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, userDTO);
-            //return Ok("User added successfully");
+            var user = await _userService.AddUserAsync(userDTO);
+            return Ok(user);
         }
     }
 }

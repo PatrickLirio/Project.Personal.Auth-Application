@@ -1,4 +1,6 @@
-﻿namespace backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models
 {
     /* This is the User model, which represents a user in our system.
      * It has properties that correspond to the columns in the database.
@@ -6,6 +8,7 @@
      */
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
         public string FirstName { get; set; }

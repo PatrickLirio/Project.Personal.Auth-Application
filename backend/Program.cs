@@ -5,6 +5,8 @@
  */
 using Microsoft.EntityFrameworkCore;
 using backend.Data;
+using backend.Repositories;
+using backend.Services;
 
 namespace backend
 {
@@ -23,11 +25,13 @@ namespace backend
 
             //setup your database connection string here
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            }
-                );
+                {
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                }
+            );
+
             builder.Services.AddScoped<UserRepository>();
+            builder.Services.AddScoped<UserService>();
 
             var app = builder.Build();
 

@@ -1,7 +1,8 @@
-﻿using backend.Models;
+﻿using backend.Data;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Data
+namespace backend.Repositories
 {
     public class UserRepository
     {
@@ -22,12 +23,18 @@ namespace backend.Data
             return await _context.Users.FindAsync(id);
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.Find(email)
+        }
+
         public async Task AddUserAsync(User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
         }
+
 
     }
 }
