@@ -4,7 +4,7 @@ using System.Text;
 
 namespace backend.Domain.Entitles
 {
-    internal class User
+    public class User
     {
     }
 }
