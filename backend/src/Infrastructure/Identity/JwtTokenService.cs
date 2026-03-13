@@ -10,7 +10,7 @@ using System.Text;
 
 namespace backend.Infrastructure.Identity
 {
-    internal class JwtTokenService : IJwtTokenService
+    public class JwtTokenService : IJwtTokenService
     {
         private readonly IConfiguration _config;
 
