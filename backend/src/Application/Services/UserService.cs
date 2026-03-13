@@ -75,6 +75,35 @@ namespace backend.Application.Services
             return MapToResponseDTO(user, token);
 
         }
+        public async Task<UserResponseDTO> LoginAsync(LoginRequestDTO request)
+
+        {
+
+            // Step 1: Find user by email 
+
+            var user = await _userRepository.GetByEmailAsync(request.Email.ToLowerInvariant())
+
+                ?? throw new UnauthorizedAccessException("Invalid email or password.");
+
+
+
+            // Step 2: Verify password against stored hash 
+
+            // BCrypt.Verify is timing-safe — prevents timing attacks 
+
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+
+                throw new UnauthorizedAccessException("Invalid email or password.");
+
+
+
+            // Step 3: Generate JWT token 
+
+            var token = _jwtTokenService.GenerateToken(user);
+
+            return MapToResponseDTO(user, token);
+
+        }
         private static UserResponseDTO MapToResponseDTO(User user, string token) => new()
 
         {
