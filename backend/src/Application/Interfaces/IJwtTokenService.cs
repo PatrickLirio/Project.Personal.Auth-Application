@@ -1,10 +1,12 @@
-﻿using System;
+﻿using backend.Domain.Entitles;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace backend.Application.Interfaces
 {
-    internal interface IJwtTokenService
+    public interface IJwtTokenService
     {
+        string GenerateToken(User user);
     }
 }

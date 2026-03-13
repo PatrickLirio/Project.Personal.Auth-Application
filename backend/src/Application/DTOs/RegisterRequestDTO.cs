@@ -18,7 +18,7 @@ namespace backend.Application.DTOs
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [MaxLength(255)]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Username is required")]
         [StringLength(100, MinimumLength = 3)]

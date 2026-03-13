@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using backend.Application.DTOs;
+using backend.Domain.Entitles;
 
 namespace backend.Application.Interfaces
 {
-    internal class IUserService
+    public interface IUserService
     {
+        Task<UserResponseDTO> RegisterAsync(RegisterRequestDTO request);
+        Task<UserResponseDTO> LoginAsync(LoginRequestDTO request);
+
     }
 }
