@@ -22,7 +22,7 @@ namespace backend.Application.DTOs
 
         [Required(ErrorMessage = "Username is required")]
         [StringLength(100, MinimumLength = 3)]
-        public string? Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [Phone(ErrorMessage = "Invalid phone number")]
         [MaxLength(20)]

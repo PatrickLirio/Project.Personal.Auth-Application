@@ -1,10 +1,13 @@
-﻿using backend.Application.Interfaces;
+﻿using backend.Application.DTOs;
+using backend.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using backend.Application.DTOs;
 
 
 namespace backend.Api.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -14,28 +17,33 @@ namespace backend.Api.Controllers
             _userService = userService;
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+                return Ok(users);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO request)
         {
             try
             {
-
                 var result = await _userService.RegisterAsync(request);
-
-                // 201 Created — standard HTTP status for resource creation 
-
                 return CreatedAtAction(nameof(Register), result);
-
             }
-
             catch (InvalidOperationException ex)
-
             {
-
-                // 409 Conflict — email or username already exists 
-
                 return Conflict(new { message = ex.Message });
-
             }
         }
 

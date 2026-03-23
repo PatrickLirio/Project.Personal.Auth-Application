@@ -1,3 +1,4 @@
+using backend.Api.Middleware;
 using backend.Application.Interfaces;
 using backend.Application.Services;
 using backend.Infrastructure.Data;
@@ -68,6 +69,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 // ORDER MATTERS: Authentication BEFORE Authorization 
 
 app.UseAuthentication();   // Who are you? (validates JWT) 

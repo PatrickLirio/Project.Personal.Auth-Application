@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace backend.Application.DTOs
+﻿namespace backend.Application.DTOs
 {
     public class UserResponseDTO
     {
@@ -13,6 +8,7 @@ namespace backend.Application.DTOs
         public string? Username { get; set; }
         public string? Email { get; set; }
         public string? Role { get; set; }
+        public string Status { get; set; } = string.Empty;
         public string? Token { get; set; }
     }
 }

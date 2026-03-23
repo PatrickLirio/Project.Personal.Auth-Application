@@ -1,4 +1,5 @@
 ﻿using backend.Domain.Entitles;
+using backend.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -40,6 +41,10 @@ namespace backend.Infrastructure.Configurations
 
                 builder.Property(u => u.PhoneNumber)
                     .HasMaxLength(20);
+
+                builder.Property(u => u.Status)
+                   .IsRequired()
+                   .HasDefaultValue(Status.Active);
 
                 builder.Property(u => u.LastLoginIp)
                       .HasMaxLength(45);

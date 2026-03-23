@@ -13,9 +13,9 @@ namespace backend.Infrastructure.Repositories
         {
             _context = context;
         }
+        public async Task<IEnumerable<User>> GetAllUsersAsync()=> await _context.Users.ToListAsync();
+
         public async Task<User?> GetByEmailAsync(string email)=> await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-
 
         public async Task<User?> GetByIdAsync(int id)=> await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 

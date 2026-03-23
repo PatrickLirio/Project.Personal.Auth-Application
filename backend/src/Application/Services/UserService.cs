@@ -18,63 +18,74 @@ namespace backend.Application.Services
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<UserResponseDTO> RegisterAsync(RegisterRequestDTO request)
+        public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
+        {
+            var users = await _userRepository.GetAllUsersAsync();
 
+            if (!users.Any())
+                throw new KeyNotFoundException("No users found.");
+
+            return users.Select(user => new UserResponseDTO
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Username = user.Username,
+                Role = user.Role.ToString()
+            });
+        }
+
+        public async Task<UserResponseDTO> RegisterAsync(RegisterRequestDTO request)
         {
 
-            if (await _userRepository.ExistsByEmailAsync(request.Email))
+                if (await _userRepository.ExistsByEmailAsync(request.Email))
 
-                throw new InvalidOperationException("Email already in use.");
+                    throw new InvalidOperationException("Email already in use.");
 
+                if (await _userRepository.ExistsByUsernameAsync(request.Username))
 
+                    throw new InvalidOperationException("Username already taken.");
 
-            if (await _userRepository.ExistsByUsernameAsync(request.Username))
+                if (request.Password != request.ConfirmPassword)
 
-                throw new InvalidOperationException("Username already taken.");
+                    throw new InvalidOperationException("Passwords do not match.");
 
-             if (request.Password != request.ConfirmPassword)
-        throw new InvalidOperationException("Passwords do not match.");
+                var user = new User
 
+                {
 
-            var user = new User
+                    FirstName = request.FirstName,
 
-            {
+                    LastName = request.LastName,
 
-                FirstName = request.FirstName,
+                    Username = request.Username,
 
-                LastName = request.LastName,
+                    Email = request.Email.ToLowerInvariant(),
 
-                Email = request.Email.ToLowerInvariant(),
+                    EmailVerifiedAt = DateTime.UtcNow,
 
-                Username = request.Username,
+                    PhoneNumber = request.PhoneNumber,
 
-                // BCrypt.HashPassword turns plain text into a secure hash 
+                    // BCrypt.HashPassword turns plain text into a secure hash 
 
-                Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                    Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
 
-                Role = UserRole.User,
+                    Role = UserRole.User,
 
-                CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.UtcNow
 
-            };
+                };
+                // Step 3: Persist to database via repository 
+                await _userRepository.AddAsync(user);
 
+                await _userRepository.SaveChangesAsync();
 
-
-            // Step 3: Persist to database via repository 
-
-            await _userRepository.AddAsync(user);
-
-            await _userRepository.SaveChangesAsync();
-
-
-
-            // Step 4: Generate JWT and return response DTO 
-
-            var token = _jwtTokenService.GenerateToken(user);
-
-            return MapToResponseDTO(user, token);
-
+                // Step 4: Generate JWT and return response DTO 
+                var token = _jwtTokenService.GenerateToken(user);
+                return MapToResponseDTO(user, token);
         }
+
         public async Task<UserResponseDTO> LoginAsync(LoginRequestDTO request)
 
         {
